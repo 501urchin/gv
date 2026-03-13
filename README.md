@@ -1,0 +1,2 @@
+# gv
+go validate
