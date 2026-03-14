@@ -5,16 +5,24 @@
 // Example:
 //
 //	v := "bad"
-//	err := gv.String(v).Required().Min(5).Max(25).Contains("b").Validate()
+//	err := gv.String(v).Required().Min(5).Max(25).Validate()
 //	if err != nil {
 //		// handle validation error
 //	}
 package gv
 
 import (
-	is "github.com/501urchin/gv/internal/string"
+	nv "github.com/501urchin/gv/internal/numeric"
+	slv "github.com/501urchin/gv/internal/slice"
+	sv "github.com/501urchin/gv/internal/string"
 )
 
-func String[T ~string](val T) *is.StringValidator[T] {
-	return is.NewStringValidator(val)
+func String[T ~string](val T) *sv.StringValidator[T] {
+	return sv.NewStringValidator(val)
+}
+func Slice[T any](val []T) *slv.SliceValidator[T] {
+	return slv.NewSliceValidator(val)
+}
+func Numeric[T nv.Numeric](val T) *nv.NumericValidator[T] {
+	return nv.NewNumericValidator(val)
 }

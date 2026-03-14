@@ -17,7 +17,7 @@ func TestStringStandard(t *testing.T) {
 			t.Error(err)
 		}
 	})
-	
+
 	t.Run("required", func(t *testing.T) {
 		err := NewStringValidator("hello").Required().Validate()
 		if err != nil {
@@ -92,7 +92,7 @@ func TestStringStandard(t *testing.T) {
 
 	t.Run("Custom", func(t *testing.T) {
 
-		var str string = "hello"
+		str := "hello"
 		customErr := errors.New("custom")
 		err := NewStringValidator(str).Custom(func(val string) error {
 			if val == str {
