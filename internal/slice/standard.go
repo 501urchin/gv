@@ -62,3 +62,6 @@ func (s *SliceValidator[T]) Max(v int) *SliceValidator[T] {
 	return s
 }
 
+func (s *SliceValidator[T]) Validate() error {
+	return s.err
+}
