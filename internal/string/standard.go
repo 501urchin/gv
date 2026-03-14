@@ -89,3 +89,6 @@ func (s *StringValidator[T]) Custom(fn func(val T) error) *StringValidator[T] {
 
 	return s
 }
+func (s *StringValidator[T]) Validate() error {
+	return s.err
+}
