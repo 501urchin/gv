@@ -78,3 +78,14 @@ func (s *StringValidator[T]) NoWhitespace() *StringValidator[T] {
 
 	return s
 }
+func (s *StringValidator[T]) Custom(fn func(val T) error) *StringValidator[T] {
+	if s.err != nil {
+		return s
+	}
+
+	if err := fn(s.val); err != nil {
+		s.err = err
+	}
+
+	return s
+}
