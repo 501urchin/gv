@@ -42,6 +42,7 @@ func (s *StringValidator[T]) Max(v int) *StringValidator[T] {
 
 	return s
 }
+
 func (s *StringValidator[T]) MustContain(v T) *StringValidator[T] {
 	if s.err != nil {
 		return s
