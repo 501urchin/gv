@@ -1,2 +1,3 @@
 # gv
-minimal allocation go validation library
+
+low allocation go validation library to make your life a little bit easier
