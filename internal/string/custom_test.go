@@ -21,3 +21,12 @@ func TestCustom(t *testing.T) {
 	})
 
 }
+
+func BenchmarkEmail(b *testing.B) {
+	var err error
+	for b.Loop() {
+		err = NewStringValidator("jalzzlk@email.com").Email().Validate()
+	}
+
+	_ = err
+}

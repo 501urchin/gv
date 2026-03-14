@@ -1,6 +1,8 @@
 package string
 
-import gverrors "github.com/501urchin/gv/internal/errors"
+import (
+	gverrors "github.com/501urchin/gv/internal/errors"
+)
 
 func parseIpv4Octet[T ~string](b T) (int, bool) {
 	if len(b) == 0 || len(b) > 3 {
@@ -20,7 +22,6 @@ func parseIpv4Octet[T ~string](b T) (int, bool) {
 
 func (s *StringValidator[T]) Ipv4() *StringValidator[T] {
 	o := make([]int, 0, 3)
-
 	for i, c := range s.val {
 		if c == '.' {
 			o = append(o, i)
@@ -56,22 +57,6 @@ func (s *StringValidator[T]) Ipv4() *StringValidator[T] {
 	if _, ok := parseIpv4Octet(s.val[o[2]+1 : sLen]); !ok {
 		s.err = gverrors.ErrNotIpv4
 		return s
-	}
-
-	return s
-}
-
-func parseIpv6Group[T ~string](s T) (int, bool) {
-	return 0, false
-}
-
-func (s *StringValidator[T]) Ipv6() *StringValidator[T] {
-	o := make([]int, 0, 8)
-
-	for i, c := range s.val {
-		if c == ':' {
-			o = append(o, i)
-		}
 	}
 
 	return s
