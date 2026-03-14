@@ -21,4 +21,6 @@ var (
 	ErrInfinite      = errors.New("field must not be infinite")
 	ErrEmail         = errors.New("field is not a valid email")
 	ErrNotIpv4       = errors.New("field is not a valid ipv4 address")
+	ErrIsNil         = errors.New("field is nil")
+	ErrEmpty         = errors.New("field is empty")
 )

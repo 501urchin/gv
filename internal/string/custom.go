@@ -7,8 +7,6 @@ import (
 	gverrors "github.com/501urchin/gv/internal/errors"
 )
 
-
-
 func (s *StringValidator[T]) UUID() *StringValidator[T] {
 	return s
 }
@@ -16,13 +14,16 @@ func (s *StringValidator[T]) UUID() *StringValidator[T] {
 var emailReg = regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
 
 func (s *StringValidator[T]) Email() *StringValidator[T] {
+	if s.err != nil {
+		return s
+	}
+	
 	if !emailReg.Match(gopt.StringToBytes(string(s.val))) {
 		s.err = gverrors.ErrEmail
 	}
 
 	return s
 }
-
 
 func (s *StringValidator[T]) Hex() *StringValidator[T]    { return s }
 func (s *StringValidator[T]) URL() *StringValidator[T]    { return s }

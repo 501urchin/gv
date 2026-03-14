@@ -3,6 +3,10 @@ package numeric
 import gverrors "github.com/501urchin/gv/internal/errors"
 
 func (n *NumericValidator[T]) Min(v T) *NumericValidator[T] {
+	if n.err != nil {
+		return n
+	}
+
 	if n.val < v {
 		n.err = gverrors.ErrMin
 	}
@@ -11,6 +15,10 @@ func (n *NumericValidator[T]) Min(v T) *NumericValidator[T] {
 }
 
 func (n *NumericValidator[T]) Max(v T) *NumericValidator[T] {
+	if n.err != nil {
+		return n
+	}
+	
 	if n.val > v {
 		n.err = gverrors.ErrMax
 	}
