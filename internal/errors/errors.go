@@ -19,4 +19,6 @@ var (
 	ErrNotOneOF      = errors.New("field is not included in set")
 	ErrOneOf         = errors.New("field is included in not allowed set")
 	ErrInfinite      = errors.New("field must not be infinite")
+	ErrEmail         = errors.New("field is not a valid email")
+	ErrNotIpv4       = errors.New("field is not a valid ipv4 address")
 )
