@@ -6,6 +6,18 @@ import (
 )
 
 func TestStringStandard(t *testing.T) {
+	t.Run("custom type", func(t *testing.T) {
+		type cx string
+		type ct cx
+
+		var str ct = "hello"
+		err := NewStringValidator(str).Min(3).Validate()
+
+		if err != nil {
+			t.Error(err)
+		}
+	})
+	
 	t.Run("required", func(t *testing.T) {
 		err := NewStringValidator("hello").Required().Validate()
 		if err != nil {
@@ -79,11 +91,10 @@ func TestStringStandard(t *testing.T) {
 	})
 
 	t.Run("Custom", func(t *testing.T) {
-		type ct string
 
-		var str ct = "hello"
+		var str string = "hello"
 		customErr := errors.New("custom")
-		err := NewStringValidator(str).Custom(func(val ct) error {
+		err := NewStringValidator(str).Custom(func(val string) error {
 			if val == str {
 				return customErr
 			}
