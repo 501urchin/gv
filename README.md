@@ -1,2 +1,2 @@
 # gv
-go validate
+minimal allocation go validation library
