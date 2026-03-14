@@ -26,3 +26,17 @@ func Slice[T any](val []T) *slv.SliceValidator[T] {
 func Numeric[T nv.Numeric](val T) *nv.NumericValidator[T] {
 	return nv.NewNumericValidator(val)
 }
+
+type validator interface {
+	Validate() error
+}
+
+func Group(v ...validator) error {
+	for _, v := range v {
+		if err := v.Validate(); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
