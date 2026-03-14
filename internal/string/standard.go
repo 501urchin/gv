@@ -54,7 +54,7 @@ func (s *StringValidator[T]) MustContain(v T) *StringValidator[T] {
 
 	return s
 }
-func (s *StringValidator[T]) NotContains(v T) *StringValidator[T] {
+func (s *StringValidator[T]) CantContain(v T) *StringValidator[T] {
 	if s.err != nil {
 		return s
 	}

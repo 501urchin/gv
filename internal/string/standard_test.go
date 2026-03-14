@@ -54,13 +54,13 @@ func TestStringStandard(t *testing.T) {
 		}
 	})
 
-	t.Run("must not contain", func(t *testing.T) {
-		err := NewStringValidator("2").NotContains("1").Validate()
+	t.Run("cant not contain", func(t *testing.T) {
+		err := NewStringValidator("2").CantContain("1").Validate()
 		if err != nil {
 			t.Error("func returned a err while it wasnt supposed to")
 		}
 
-		err = NewStringValidator("1").NotContains("1").Validate()
+		err = NewStringValidator("1").CantContain("1").Validate()
 		if err == nil {
 			t.Error("func didnt return a err while it was supposed to")
 		}
@@ -98,5 +98,14 @@ func TestStringStandard(t *testing.T) {
 			t.Errorf("failed to return correct error: excpected %v but got %v", customErr, err)
 		}
 	})
+
+}
+
+func BenchmarkStandard(b *testing.B) {
+	var err error
+	for b.Loop() {
+		err = NewStringValidator("hello ").Required().Min(1).Max(100).MustContain("h").CantContain("brrr").NoWhitespace().Validate()
+	}
+	_ = err
 
 }
