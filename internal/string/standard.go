@@ -42,13 +42,13 @@ func (s *StringValidator[T]) Max(v int) *StringValidator[T] {
 
 	return s
 }
-func (s *StringValidator[T]) Contains(v T) *StringValidator[T] {
+func (s *StringValidator[T]) MustContain(v T) *StringValidator[T] {
 	if s.err != nil {
 		return s
 	}
 
-	if strings.Contains(string(s.val), string(v)) {
-		s.err = gverrors.ErrContains
+	if !strings.Contains(string(s.val), string(v)) {
+		s.err = gverrors.ErrMustContain
 	}
 
 	return s
@@ -58,8 +58,8 @@ func (s *StringValidator[T]) NotContains(v T) *StringValidator[T] {
 		return s
 	}
 
-	if !strings.Contains(string(s.val), string(v)) {
-		s.err = gverrors.ErrContains
+	if strings.Contains(string(s.val), string(v)) {
+		s.err = gverrors.ErrNotContains
 	}
 
 	return s
