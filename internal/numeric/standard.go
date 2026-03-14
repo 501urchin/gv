@@ -41,6 +41,18 @@ func (n *NumericValidator[T]) Negative() *NumericValidator[T] {
 
 	return n
 }
+
+func (n *NumericValidator[T]) Positive() *NumericValidator[T] {
+	if n.err != nil {
+		return n
+	}
+
+	if n.val < 0 {
+		n.err = gverrors.ErrNotPositive
+	}
+
+	return n
+}
 func (n *NumericValidator[T]) Equal(v T) *NumericValidator[T] {
 	if n.err != nil {
 		return n
@@ -64,17 +76,6 @@ func (n *NumericValidator[T]) NotEqual(v T) *NumericValidator[T] {
 	return n
 }
 
-func (n *NumericValidator[T]) Positive() *NumericValidator[T] {
-	if n.err != nil {
-		return n
-	}
-
-	if n.val < 0 {
-		n.err = gverrors.ErrNotPositive
-	}
-
-	return n
-}
 func (n *NumericValidator[T]) Custom(fn func(v T) error) *NumericValidator[T] {
 	if n.err != nil {
 		return n

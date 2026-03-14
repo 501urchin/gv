@@ -4,7 +4,7 @@ package gverrors
 import "errors"
 
 var (
-	ErrRequired      = errors.New("required field is empty")
+	ErrRequired      = errors.New("required field is empty or contains default value")
 	ErrMin           = errors.New("field is smaller than allowed minimum")
 	ErrMax           = errors.New("field is bigger than allowed maximum")
 	ErrMustContain   = errors.New("field does not contains a required value")
