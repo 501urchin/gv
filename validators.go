@@ -19,6 +19,10 @@ import (
 	sv "github.com/501urchin/gv/internal/string"
 )
 
+type validator interface {
+	Validate() error
+}
+
 func String[T ~string](val T) *sv.StringValidator[T] {
 	return sv.NewStringValidator(val)
 }
@@ -27,10 +31,6 @@ func Slice[T any](val []T) *slv.SliceValidator[T] {
 }
 func Numeric[T nv.Numeric](val T) *nv.NumericValidator[T] {
 	return nv.NewNumericValidator(val)
-}
-
-type validator interface {
-	Validate() error
 }
 
 // First runs the checks and returns on the first func that returns a error
