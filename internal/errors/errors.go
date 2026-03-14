@@ -1,4 +1,4 @@
-// package gverrors contains errors that are returned by the validators
+// Package gverrors contains errors that are returned by the validators
 package gverrors
 
 import "errors"
@@ -12,4 +12,11 @@ var (
 	ErrHasWhitespace = errors.New("field contains whitespace")
 	ErrUpper         = errors.New("field contains uppercased letters")
 	ErrLower         = errors.New("field contains lowercased letters")
+	ErrNotPositive   = errors.New("field must be a positive number")
+	ErrNotNegative   = errors.New("field must be a negative number")
+	ErrNotEqual      = errors.New("field does not equal value")
+	ErrEqual         = errors.New("field must not equal value")
+	ErrNotOneOF      = errors.New("field is not included in set")
+	ErrOneOf         = errors.New("field is included in not allowed set")
+	ErrInfinite      = errors.New("field must not be infinite")
 )

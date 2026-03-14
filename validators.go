@@ -35,8 +35,8 @@ type validator interface {
 
 // First runs the checks and returns on the first func that returns a error
 func First(v ...validator) error {
-	for _, v := range v {
-		if err := v.Validate(); err != nil {
+	for _, fn := range v {
+		if err := fn.Validate(); err != nil {
 			return err
 		}
 	}
@@ -46,8 +46,8 @@ func First(v ...validator) error {
 
 // Last runs the checks and returns on the last func that returns a error
 func Last(v ...validator) (r error) {
-	for _, v := range v {
-		if err := v.Validate(); err != nil {
+	for _, fn := range v {
+		if err := fn.Validate(); err != nil {
 			r = err
 		}
 	}
@@ -57,8 +57,8 @@ func Last(v ...validator) (r error) {
 
 // Join runs the checks and joins all errors into a single error
 func Join(v ...validator) (r error) {
-	for _, v := range v {
-		if err := v.Validate(); err != nil {
+	for _, fn := range v {
+		if err := fn.Validate(); err != nil {
 			r = errors.Join(r, err)
 		}
 	}

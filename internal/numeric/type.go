@@ -1,3 +1,4 @@
+// Package numeric implements methods for numerics
 package numeric
 
 type Numeric interface {

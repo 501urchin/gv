@@ -1,3 +1,4 @@
+// Package slice implements methods for validating slices
 package slice
 
 
