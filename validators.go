@@ -12,6 +12,8 @@
 package gv
 
 import (
+	"errors"
+
 	nv "github.com/501urchin/gv/internal/numeric"
 	slv "github.com/501urchin/gv/internal/slice"
 	sv "github.com/501urchin/gv/internal/string"
@@ -31,7 +33,8 @@ type validator interface {
 	Validate() error
 }
 
-func Group(v ...validator) error {
+// First runs the checks and returns on the first func that returns a error
+func First(v ...validator) error {
 	for _, v := range v {
 		if err := v.Validate(); err != nil {
 			return err
@@ -39,4 +42,26 @@ func Group(v ...validator) error {
 	}
 
 	return nil
+}
+
+// Last runs the checks and returns on the last func that returns a error
+func Last(v ...validator) (r error) {
+	for _, v := range v {
+		if err := v.Validate(); err != nil {
+			r = err
+		}
+	}
+
+	return r
+}
+
+// Join runs the checks and joins all errors into a single error
+func Join(v ...validator) (r error) {
+	for _, v := range v {
+		if err := v.Validate(); err != nil {
+			r = errors.Join(r, err)
+		}
+	}
+
+	return r
 }
