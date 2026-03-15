@@ -1,7 +1,6 @@
 // Package slice implements methods for validating slices
 package slice
 
-
 type SliceValidator[T any] struct {
 	val []T
 	err error

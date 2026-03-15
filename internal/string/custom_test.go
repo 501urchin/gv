@@ -20,6 +20,40 @@ func TestCustom(t *testing.T) {
 		}
 	})
 
+	t.Run("lower", func(t *testing.T) {
+		err := NewStringValidator("abcd45").Lower().Validate()
+		if err != nil {
+			t.Error("func threw error when it wasnt supposed to")
+		}
+
+		err = NewStringValidator("@FCDSS").Lower().Validate()
+		if !errors.Is(err, gverrors.ErrUpper) {
+			t.Errorf("excpected %v but got %v", gverrors.ErrUpper, err)
+		}
+	})
+	t.Run("upper", func(t *testing.T) {
+		err := NewStringValidator("SDJKSHFD23").Upper().Validate()
+		if err != nil {
+			t.Error("func threw error when it wasnt supposed to")
+		}
+
+		err = NewStringValidator("kcjnm").Upper().Validate()
+		if !errors.Is(err, gverrors.ErrLower) {
+			t.Errorf("excpected %v but got %v", gverrors.ErrLower, err)
+		}
+	})
+	t.Run("hex", func(t *testing.T) {
+		err := NewStringValidator("abcd45").Hex().Validate()
+		if err != nil {
+			t.Error("func threw error when it wasnt supposed to")
+		}
+
+		err = NewStringValidator("@3d5r").Hex().Validate()
+		if !errors.Is(err, gverrors.ErrNotHex) {
+			t.Errorf("excpected %v but got %v", gverrors.ErrNotHex, err)
+		}
+	})
+
 }
 
 func BenchmarkEmail(b *testing.B) {

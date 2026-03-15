@@ -23,4 +23,5 @@ var (
 	ErrNotIpv4       = errors.New("field is not a valid ipv4 address")
 	ErrIsNil         = errors.New("field is nil")
 	ErrEmpty         = errors.New("field is empty")
+	ErrNotHex        = errors.New("field is not hex")
 )

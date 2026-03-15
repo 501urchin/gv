@@ -24,7 +24,7 @@ func (s *StringValidator[T]) Ipv4() *StringValidator[T] {
 	if s.err != nil {
 		return s
 	}
-	
+
 	o := make([]int, 0, 3)
 	for i, c := range s.val {
 		if c == '.' {

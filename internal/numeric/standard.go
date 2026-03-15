@@ -18,7 +18,7 @@ func (n *NumericValidator[T]) Max(v T) *NumericValidator[T] {
 	if n.err != nil {
 		return n
 	}
-	
+
 	if n.val > v {
 		n.err = gverrors.ErrMax
 	}
