@@ -67,7 +67,21 @@ func (s *StringValidator[T]) Hex() *StringValidator[T] {
 	return s
 }
 
+func (s *StringValidator[T]) Alpha() *StringValidator[T] {
+	if s.err != nil {
+		return s
+	}
+
+	for _, c := range s.val {
+		if (c < '0' || c > '9') && (c < 'a' || c > 'z') && (c < 'A' || c > 'Z') {
+			s.err = gverrors.ErrNotAlpha
+			return s
+		}
+	}
+
+	return s
+}
+
 // func (s *StringValidator[T]) UUID() *StringValidator[T]   { return s }
 // func (s *StringValidator[T]) URL() *StringValidator[T]    { return s }
-// func (s *StringValidator[T]) Alpha() *StringValidator[T]  { return s }
 // func (s *StringValidator[T]) Base64() *StringValidator[T] { return s }

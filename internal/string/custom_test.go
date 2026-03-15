@@ -53,6 +53,17 @@ func TestCustom(t *testing.T) {
 			t.Errorf("excpected %v but got %v", gverrors.ErrNotHex, err)
 		}
 	})
+	t.Run("alpha", func(t *testing.T) {
+		err := NewStringValidator("abcdefghijklmnopqrstuvwxyz12345678").Alpha().Validate()
+		if err != nil {
+			t.Error("func threw error when it wasnt supposed to")
+		}
+
+		err = NewStringValidator("@3d5r").Alpha().Validate()
+		if !errors.Is(err, gverrors.ErrNotAlpha) {
+			t.Errorf("excpected %v but got %v", gverrors.ErrNotAlpha, err)
+		}
+	})
 
 }
 
