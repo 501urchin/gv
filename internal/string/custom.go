@@ -52,16 +52,22 @@ func (s *StringValidator[T]) Upper() *StringValidator[T] {
 	return s
 }
 
+func isHex[T ~string](v T) bool {
+	for _, c := range v {
+		if (c < '0' || c > '9') && (c < 'a' || c > 'f') && (c < 'A' || c > 'F') {
+			return false
+		}
+	}
+	return true
+}
 func (s *StringValidator[T]) Hex() *StringValidator[T] {
 	if s.err != nil {
 		return s
 	}
 
-	for _, c := range s.val {
-		if (c < '0' || c > '9') && (c < 'a' || c > 'f') && (c < 'A' || c > 'F') {
-			s.err = gverrors.ErrNotHex
-			return s
-		}
+	if !isHex(s.val) {
+		s.err = gverrors.ErrNotHex
+		return s
 	}
 
 	return s
@@ -82,6 +88,42 @@ func (s *StringValidator[T]) Alpha() *StringValidator[T] {
 	return s
 }
 
-// func (s *StringValidator[T]) UUID() *StringValidator[T]   { return s }
+func (s *StringValidator[T]) UUID() *StringValidator[T] {
+	if s.err != nil {
+		return s
+	}
+
+	if len(s.val) != 36 {
+		s.err = gverrors.ErrNotUUID
+		return s
+	}
+
+	if !isHex(s.val[:8]) {
+		s.err = gverrors.ErrNotUUID
+		return s
+	}
+	if !isHex(s.val[9:13]) {
+		s.err = gverrors.ErrNotUUID
+		return s
+	}
+
+	if !isHex(s.val[14:18]) {
+		s.err = gverrors.ErrNotUUID
+		return s
+	}
+
+	if !isHex(s.val[19:23]) {
+		s.err = gverrors.ErrNotUUID
+		return s
+	}
+
+	if !isHex(s.val[24:32]) {
+		s.err = gverrors.ErrNotUUID
+		return s
+	}
+
+	return s
+}
+
 // func (s *StringValidator[T]) URL() *StringValidator[T]    { return s }
 // func (s *StringValidator[T]) Base64() *StringValidator[T] { return s }

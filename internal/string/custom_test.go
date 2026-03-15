@@ -64,6 +64,17 @@ func TestCustom(t *testing.T) {
 			t.Errorf("excpected %v but got %v", gverrors.ErrNotAlpha, err)
 		}
 	})
+	t.Run("uuid", func(t *testing.T) {
+		err := NewStringValidator("f47ac10b-58cc-4372-a567-0e02b2c3d479").UUID().Validate()
+		if err != nil {
+			t.Error("func threw error when it wasnt supposed to")
+		}
+
+		err = NewStringValidator("@3d5r").UUID().Validate()
+		if !errors.Is(err, gverrors.ErrNotUUID) {
+			t.Errorf("excpected %v but got %v", gverrors.ErrNotUUID, err)
+		}
+	})
 
 }
 

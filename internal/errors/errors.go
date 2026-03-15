@@ -25,4 +25,5 @@ var (
 	ErrEmpty         = errors.New("field is empty")
 	ErrNotHex        = errors.New("field is not hex")
 	ErrNotAlpha      = errors.New("field is not alphanumerical")
+	ErrNotUUID      = errors.New("field is not valid UUID")
 )
