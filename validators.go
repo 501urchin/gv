@@ -14,14 +14,11 @@ package gv
 import (
 	"errors"
 
+	gverrors "github.com/501urchin/gv/internal/errors"
 	nv "github.com/501urchin/gv/internal/numeric"
 	slv "github.com/501urchin/gv/internal/slice"
 	sv "github.com/501urchin/gv/internal/string"
 )
-
-type validator interface {
-	Validate() error
-}
 
 func String[T ~string](val T) *sv.StringValidator[T] {
 	return sv.NewStringValidator(val)
@@ -34,9 +31,9 @@ func Numeric[T nv.Numeric](val T) *nv.NumericValidator[T] {
 }
 
 // First runs the checks and returns on the first func that returns a error
-func First(v ...validator) error {
+func First(v ...error) error {
 	for _, fn := range v {
-		if err := fn.Validate(); err != nil {
+		if err := fn; err != nil {
 			return err
 		}
 	}
@@ -45,9 +42,9 @@ func First(v ...validator) error {
 }
 
 // Last runs the checks and returns on the last func that returns a error
-func Last(v ...validator) (r error) {
+func Last(v ...error) (r error) {
 	for _, fn := range v {
-		if err := fn.Validate(); err != nil {
+		if err := fn; err != nil {
 			r = err
 		}
 	}
@@ -56,12 +53,32 @@ func Last(v ...validator) (r error) {
 }
 
 // Join runs the checks and joins all errors into a single error
-func Join(v ...validator) (r error) {
+func Join(v ...error) (r error) {
 	for _, fn := range v {
-		if err := fn.Validate(); err != nil {
+		if err := fn; err != nil {
 			r = errors.Join(r, err)
 		}
 	}
 
 	return r
+}
+
+type schemaFunc[T any] func(d *T) error
+
+type schemaValidator[T any] struct {
+	fn schemaFunc[T]
+}
+
+func Schema[T any](fn schemaFunc[T]) *schemaValidator[T] {
+	return &schemaValidator[T]{
+		fn: fn,
+	}
+}
+
+func (s *schemaValidator[T]) Validate(data *T) error {
+	if data == nil {
+		return gverrors.ErrIsNilOrEmpty
+	}
+
+	return s.fn(data)
 }

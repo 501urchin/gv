@@ -16,28 +16,18 @@ func (s *SliceValidator[T]) Element(fn func(e T) error) *SliceValidator[T] {
 
 	return s
 }
-func (s *SliceValidator[T]) NotNil() *SliceValidator[T] {
+func (s *SliceValidator[T]) Required() *SliceValidator[T] {
 	if s.err != nil {
 		return s
 	}
 
 	if s.val == nil {
-		s.err = gverrors.ErrIsNil
+		s.err = gverrors.ErrIsNilOrEmpty
 	}
 
 	return s
 }
-func (s *SliceValidator[T]) NotEmpty() *SliceValidator[T] {
-	if s.err != nil {
-		return s
-	}
 
-	if len(s.val) == 0 {
-		s.err = gverrors.ErrEmpty
-	}
-
-	return s
-}
 func (s *SliceValidator[T]) Min(v int) *SliceValidator[T] {
 	if s.err != nil {
 		return s

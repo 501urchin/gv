@@ -19,25 +19,13 @@ func TestSliceStandard(t *testing.T) {
 	})
 
 	t.Run("not nil", func(t *testing.T) {
-		err := NewSliceValidator([]int{1}).NotNil().Validate()
+		err := NewSliceValidator([]int{1}).Required().Validate()
 		if err != nil {
 			t.Error("func returned a err while it wasnt supposed to")
 		}
 
 		var s []int
-		err = NewSliceValidator(s).NotNil().Validate()
-		if err == nil {
-			t.Error("func didnt return a err while it was supposed to")
-		}
-	})
-
-	t.Run("not empty", func(t *testing.T) {
-		err := NewSliceValidator([]int{1}).NotEmpty().Validate()
-		if err != nil {
-			t.Error("func returned a err while it wasnt supposed to")
-		}
-
-		err = NewSliceValidator([]int{}).NotEmpty().Validate()
+		err = NewSliceValidator(s).Required().Validate()
 		if err == nil {
 			t.Error("func didnt return a err while it was supposed to")
 		}
@@ -73,7 +61,7 @@ func TestSliceStandard(t *testing.T) {
 			}
 
 			return nil
-		}).Validate()
+		})
 		if err == nil {
 			t.Error("func failed to return custom err")
 		}

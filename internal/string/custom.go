@@ -60,6 +60,7 @@ func isHex[T ~string](v T) bool {
 	}
 	return true
 }
+
 func (s *StringValidator[T]) Hex() *StringValidator[T] {
 	if s.err != nil {
 		return s
@@ -73,16 +74,22 @@ func (s *StringValidator[T]) Hex() *StringValidator[T] {
 	return s
 }
 
+func isAlpha[T ~string](v T) bool {
+	for _, c := range v {
+		if (c < '0' || c > '9') && (c < 'a' || c > 'z') && (c < 'A' || c > 'Z') {
+			return false
+		}
+	}
+	return true
+}
 func (s *StringValidator[T]) Alpha() *StringValidator[T] {
 	if s.err != nil {
 		return s
 	}
 
-	for _, c := range s.val {
-		if (c < '0' || c > '9') && (c < 'a' || c > 'z') && (c < 'A' || c > 'Z') {
-			s.err = gverrors.ErrNotAlpha
-			return s
-		}
+	if !isAlpha(s.val) {
+		s.err = gverrors.ErrNotAlpha
+		return s
 	}
 
 	return s
