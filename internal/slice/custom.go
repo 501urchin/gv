@@ -1,8 +1,45 @@
 package slice
 
-// func (s *SliceValidator[T]) Unique() *SliceValidator[T]
-// func (s *SliceValidator[T]) UniqueBy(fn func(T) any) *SliceValidator[T]
-// func (s *SliceValidator[T]) OneOf(v ...T) *SliceValidator[T]
-// func (s *SliceValidator[T]) NoneOf(v ...T) *SliceValidator[T]
+import gverrors "github.com/501urchin/gv/internal/errors"
+
+func (s *SliceValidator[T]) Unique() *SliceValidator[T] {
+	if len(s.val) <= 1 {
+		return s
+	}
+
+	vm := make(map[any]int)
+
+	for _, v := range s.val {
+		vm[v]++
+
+		if vm[v] > 1 {
+			s.err = gverrors.ErrNotUnique
+			return s
+		}
+	}
+
+	return s
+}
+
+// UniqueBy can be used for cases where you have a []struct and want only a specific field to be unqiue
+func (s *SliceValidator[T]) UniqueBy(fn func(v T) any) *SliceValidator[T] {
+	if len(s.val) <= 1 {
+		return s
+	}
+
+	vm := make(map[any]int)
+
+	for _, v := range s.val {
+		vl := fn(v)
+		vm[vl]++
+
+		if vm[vl] > 1 {
+			s.err = gverrors.ErrNotUnique
+			return s
+		}
+	}
+	return s
+}
+
 // func (s *SliceValidator[T]) Any(fn func(T) bool) *SliceValidator[T]
 // func (s *SliceValidator[T]) All(fn func(T) bool) *SliceValidator[T]
