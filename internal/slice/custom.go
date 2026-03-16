@@ -41,5 +41,24 @@ func (s *SliceValidator[T]) UniqueBy(fn func(v T) any) *SliceValidator[T] {
 	return s
 }
 
-// func (s *SliceValidator[T]) Any(fn func(T) bool) *SliceValidator[T]
-// func (s *SliceValidator[T]) All(fn func(T) bool) *SliceValidator[T]
+func (s *SliceValidator[T]) Any(fn func(T) bool) *SliceValidator[T] {
+	for _, v := range s.val {
+		if fn(v) {
+			return s
+		}
+	}
+
+	s.err = gverrors.ErrNotSatisfied
+	return s
+}
+
+func (s *SliceValidator[T]) All(fn func(T) bool) *SliceValidator[T] {
+	for _, v := range s.val {
+		if !fn(v) {
+			s.err = gverrors.ErrNotSatisfied
+			return s
+		}
+	}
+
+	return s
+}

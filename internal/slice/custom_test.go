@@ -21,6 +21,42 @@ func TestUnique(t *testing.T) {
 		}
 	})
 }
+func TestAny(t *testing.T) {
+	t.Run("valid case", func(t *testing.T) {
+		err := NewSliceValidator([]int{1, 2, 3}).Any(func(i int) bool {
+			return i%2 == 0
+		}).Validate()
+		if err != nil {
+			t.Errorf("func returned a err when i wasnt supposed to: %v", err)
+		}
+	})
+	t.Run("invalid case", func(t *testing.T) {
+		err := NewSliceValidator([]int{1, 1, 1}).Any(func(i int) bool {
+			return i%2 == 0
+		}).Validate()
+		if !errors.Is(err, gverrors.ErrNotSatisfied) {
+			t.Errorf("expected %v but got %v", gverrors.ErrNotSatisfied, err)
+		}
+	})
+}
+func TestAll(t *testing.T) {
+	t.Run("valid case", func(t *testing.T) {
+		err := NewSliceValidator([]int{2, 2, 2}).All(func(i int) bool {
+			return i%2 == 0
+		}).Validate()
+		if err != nil {
+			t.Errorf("func returned a err when i wasnt supposed to: %v", err)
+		}
+	})
+	t.Run("invalid case", func(t *testing.T) {
+		err := NewSliceValidator([]int{2, 2, 1}).All(func(i int) bool {
+			return i%2 == 0
+		}).Validate()
+		if !errors.Is(err, gverrors.ErrNotSatisfied) {
+			t.Errorf("expected %v but got %v", gverrors.ErrNotSatisfied, err)
+		}
+	})
+}
 
 func TestUniqueBy(t *testing.T) {
 	type Data struct {
@@ -51,6 +87,16 @@ func BenchmarkUnique(b *testing.B) {
 	dt := []int{1, 2, 3}
 	for b.Loop() {
 		err = NewSliceValidator(dt).Unique().Validate()
+	}
+	_ = err
+}
+func BenchmarkAny(b *testing.B) {
+	var err error
+	dt := []int{2, 2, 1}
+	for b.Loop() {
+		err = NewSliceValidator(dt).All(func(i int) bool {
+			return i%2 == 0
+		}).Validate()
 	}
 	_ = err
 }

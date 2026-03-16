@@ -26,4 +26,5 @@ var (
 	ErrNotAlpha      = errors.New("field is not alphanumerical")
 	ErrNotUUID       = errors.New("field is not valid UUID")
 	ErrNotUnique     = errors.New("field contains duplicate values")
+	ErrNotSatisfied  = errors.New("field does not satisfy to rule")
 )
