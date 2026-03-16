@@ -75,6 +75,17 @@ func TestCustom(t *testing.T) {
 			t.Errorf("excpected %v but got %v", gverrors.ErrNotUUID, err)
 		}
 	})
+	// t.Run("url", func(t *testing.T) {
+	// 	err := NewStringValidator("www.jayac.dev").URL().Validate()
+	// 	if err != nil {
+	// 		t.Error("func threw error when it wasnt supposed to")
+	// 	}
+
+	// 	err = NewStringValidator("badurl").URL().Validate()
+	// 	if !errors.Is(err, gverrors.ErrNotURL) {
+	// 		t.Errorf("excpected %v but got %v", gverrors.ErrNotURL, err)
+	// 	}
+	// })
 
 }
 

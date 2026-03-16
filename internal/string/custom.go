@@ -7,9 +7,8 @@ import (
 	"github.com/501urchin/gopt"
 	gverrors "github.com/501urchin/gv/internal/errors"
 )
-
+// TODO: move away from regex based validation since its slow compared to the other methods
 var emailReg = regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
-
 func (s *StringValidator[T]) Email() *StringValidator[T] {
 	if s.err != nil {
 		return s
@@ -132,5 +131,12 @@ func (s *StringValidator[T]) UUID() *StringValidator[T] {
 	return s
 }
 
-// func (s *StringValidator[T]) URL() *StringValidator[T]    { return s }
-// func (s *StringValidator[T]) Base64() *StringValidator[T] { return s }
+// func (s *StringValidator[T]) URL() *StringValidator[T] {
+// 	_, err := url.Parse(string(s.val))
+// 	if err != nil {
+// 		s.err = gverrors.ErrNotURL
+// 		return s
+// 	}
+
+// 	return s
+// }

@@ -27,4 +27,5 @@ var (
 	ErrNotUUID       = errors.New("field is not valid UUID")
 	ErrNotUnique     = errors.New("field contains duplicate values")
 	ErrNotSatisfied  = errors.New("field does not satisfy to rule")
+	ErrNotURL        = errors.New("field is not a valid url")
 )

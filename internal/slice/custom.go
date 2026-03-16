@@ -40,6 +40,14 @@ func (s *SliceValidator[T]) UniqueBy(fn func(v T) any) *SliceValidator[T] {
 	}
 	return s
 }
+func (s *SliceValidator[T]) Custom(fn func(v []T) error) *SliceValidator[T] {
+	err := fn(s.val)
+	if err != nil {
+		s.err = err
+	}
+	
+	return s
+}
 
 func (s *SliceValidator[T]) Any(fn func(T) bool) *SliceValidator[T] {
 	for _, v := range s.val {
