@@ -1,6 +1,9 @@
 package slice
 
-import gverrors "github.com/501urchin/gv/internal/errors"
+import (
+	gverrors "github.com/501urchin/gv/internal/errors"
+	"github.com/501urchin/gv/internal/pkg"
+)
 
 // Element loops over the slice and runs the custom validation func fn. fn needs to return a error
 func (s *SliceValidator[T]) Element(fn func(e T) error) *SliceValidator[T] {
@@ -16,42 +19,39 @@ func (s *SliceValidator[T]) Element(fn func(e T) error) *SliceValidator[T] {
 
 	return s
 }
-func (s *SliceValidator[T]) Required() *SliceValidator[T] {
+func (s *SliceValidator[T]) Required(customErr ...error) *SliceValidator[T] {
 	if s.err != nil {
 		return s
 	}
 
 	if s.val == nil {
-		s.err = gverrors.ErrIsNilOrEmpty
+		s.err = pkg.DefaultOrCustomError(gverrors.ErrIsNilOrEmpty, customErr...)
 	}
 
 	return s
 }
 
-func (s *SliceValidator[T]) Min(v int) *SliceValidator[T] {
+func (s *SliceValidator[T]) Min(v int, customErr ...error) *SliceValidator[T] {
 	if s.err != nil {
 		return s
 	}
 
 	if len(s.val) < v {
-		s.err = gverrors.ErrMin
+		s.err = pkg.DefaultOrCustomError(gverrors.ErrMin, customErr...)
 	}
 
 	return s
 }
 
-func (s *SliceValidator[T]) Max(v int) *SliceValidator[T] {
+func (s *SliceValidator[T]) Max(v int, customErr ...error) *SliceValidator[T] {
 	if s.err != nil {
 		return s
 	}
 
 	if len(s.val) > v {
-		s.err = gverrors.ErrMax
+		s.err = pkg.DefaultOrCustomError(gverrors.ErrMax, customErr...)
 	}
 
 	return s
 }
 
-func (s *SliceValidator[T]) Validate() error {
-	return s.err
-}

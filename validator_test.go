@@ -57,7 +57,6 @@ func BenchmarkHelpers(b *testing.B) {
 			}).Validate(&info.embedded),
 		)
 	})
-
 	b.Run("schema", func(b *testing.B) {
 		var err error
 		for b.Loop() {

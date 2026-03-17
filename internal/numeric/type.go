@@ -18,3 +18,7 @@ func NewNumericValidator[T Numeric](v T) *NumericValidator[T] {
 		err: nil,
 	}
 }
+
+func (n *NumericValidator[T]) Validate() error {
+	return n.err
+}

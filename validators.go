@@ -17,12 +17,17 @@ import (
 	sv "github.com/501urchin/gv/internal/string"
 )
 
+// String validates string types, including custom types based on string.
 func String[T ~string](val T) *sv.StringValidator[T] {
 	return sv.NewStringValidator(val)
 }
+
+// Slice validates any slice or array.
 func Slice[T any](val []T) *slv.SliceValidator[T] {
 	return slv.NewSliceValidator(val)
 }
+
+// Numeric validates all built in numeric types except complex64/128.
 func Numeric[T nv.Numeric](val T) *nv.NumericValidator[T] {
 	return nv.NewNumericValidator(val)
 }

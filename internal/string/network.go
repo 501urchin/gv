@@ -2,6 +2,7 @@ package string
 
 import (
 	gverrors "github.com/501urchin/gv/internal/errors"
+	"github.com/501urchin/gv/internal/pkg"
 )
 
 func parseIpv4Octet[T ~string](b T) (int, bool) {
@@ -20,7 +21,7 @@ func parseIpv4Octet[T ~string](b T) (int, bool) {
 	return n, n <= 255
 }
 
-func (s *StringValidator[T]) Ipv4() *StringValidator[T] {
+func (s *StringValidator[T]) Ipv4(customErr ...error) *StringValidator[T] {
 	if s.err != nil {
 		return s
 	}
@@ -32,36 +33,35 @@ func (s *StringValidator[T]) Ipv4() *StringValidator[T] {
 		}
 	}
 
+	sLen := len(s.val)
+
 	if len(o) != 3 {
-		s.err = gverrors.ErrNotIpv4
-		return s
+		goto errorCase
+	}
+
+	if sLen < o[2]+1 {
+		goto errorCase
 	}
 
 	if _, ok := parseIpv4Octet(s.val[0:o[0]]); !ok {
-		s.err = gverrors.ErrNotIpv4
-		return s
+		goto errorCase
 	}
 
 	if _, ok := parseIpv4Octet(s.val[o[0]+1 : o[1]]); !ok {
-		s.err = gverrors.ErrNotIpv4
-		return s
+		goto errorCase
 	}
 
 	if _, ok := parseIpv4Octet(s.val[o[1]+1 : o[2]]); !ok {
-		s.err = gverrors.ErrNotIpv4
-		return s
-	}
-
-	sLen := len(s.val)
-	if sLen < o[2]+1 {
-		s.err = gverrors.ErrNotIpv4
-		return s
+		goto errorCase
 	}
 
 	if _, ok := parseIpv4Octet(s.val[o[2]+1 : sLen]); !ok {
-		s.err = gverrors.ErrNotIpv4
-		return s
+		goto errorCase
 	}
 
 	return s
+errorCase:
+	s.err = pkg.DefaultOrCustomError(gverrors.ErrNotIpv4, customErr...)
+	return s
+
 }

@@ -12,3 +12,7 @@ func NewStringValidator[T ~string](v T) *StringValidator[T] {
 		err: nil,
 	}
 }
+
+func (s *StringValidator[T]) Validate(customErr ...error) error {
+	return s.err
+}

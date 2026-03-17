@@ -12,3 +12,7 @@ func NewSliceValidator[T any](v []T) *SliceValidator[T] {
 		err: nil,
 	}
 }
+
+func (s *SliceValidator[T]) Validate() error {
+	return s.err
+}

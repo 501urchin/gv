@@ -5,74 +5,75 @@ import (
 	"unicode"
 
 	gverrors "github.com/501urchin/gv/internal/errors"
+	"github.com/501urchin/gv/internal/pkg"
 )
 
-func (s *StringValidator[T]) Required() *StringValidator[T] {
+func (s *StringValidator[T]) Required(customErr ...error) *StringValidator[T] {
 	if s.err != nil {
 		return s
 	}
 
 	if len(s.val) == 0 {
-		s.err = gverrors.ErrRequired
+		s.err = pkg.DefaultOrCustomError(gverrors.ErrRequired, customErr...)
 	}
 
 	return s
 }
 
-func (s *StringValidator[T]) Min(v int) *StringValidator[T] {
+func (s *StringValidator[T]) Min(v int, customErr ...error) *StringValidator[T] {
 	if s.err != nil {
 		return s
 	}
 
 	if len(s.val) < v {
-		s.err = gverrors.ErrMin
+		s.err = pkg.DefaultOrCustomError(gverrors.ErrMin, customErr...)
 	}
 
 	return s
 }
 
-func (s *StringValidator[T]) Max(v int) *StringValidator[T] {
+func (s *StringValidator[T]) Max(v int, customErr ...error) *StringValidator[T] {
 	if s.err != nil {
 		return s
 	}
 
 	if len(s.val) > v {
-		s.err = gverrors.ErrMax
+		s.err = pkg.DefaultOrCustomError(gverrors.ErrMax, customErr...)
 	}
 
 	return s
 }
 
-func (s *StringValidator[T]) MustContain(v T) *StringValidator[T] {
+func (s *StringValidator[T]) MustContain(v T, customErr ...error) *StringValidator[T] {
 	if s.err != nil {
 		return s
 	}
 
 	if !strings.Contains(string(s.val), string(v)) {
-		s.err = gverrors.ErrMustContain
+		s.err = pkg.DefaultOrCustomError(gverrors.ErrMustContain, customErr...)
 	}
 
 	return s
 }
-func (s *StringValidator[T]) CantContain(v T) *StringValidator[T] {
+func (s *StringValidator[T]) CantContain(v T, customErr ...error) *StringValidator[T] {
 	if s.err != nil {
 		return s
 	}
 
 	if strings.Contains(string(s.val), string(v)) {
-		s.err = gverrors.ErrNotContains
+		s.err = pkg.DefaultOrCustomError(gverrors.ErrNotContains, customErr...)
 	}
 
 	return s
 }
-func (s *StringValidator[T]) NoWhitespace() *StringValidator[T] {
+func (s *StringValidator[T]) NoWhitespace(customErr ...error) *StringValidator[T] {
 	if s.err != nil {
 		return s
 	}
 
 	for _, r := range s.val {
 		if unicode.IsSpace(r) {
-			s.err = gverrors.ErrHasWhitespace
+			s.err = pkg.DefaultOrCustomError(gverrors.ErrHasWhitespace, customErr...)
 			return s
 		}
 	}
@@ -89,7 +90,4 @@ func (s *StringValidator[T]) Custom(fn func(val T) error) *StringValidator[T] {
 	}
 
 	return s
-}
-func (s *StringValidator[T]) Validate() error {
-	return s.err
 }

@@ -6,31 +6,32 @@ import (
 
 	"github.com/501urchin/gopt"
 	gverrors "github.com/501urchin/gv/internal/errors"
+	"github.com/501urchin/gv/internal/pkg"
 )
 
 // TODO: move away from regex based validation since its slow compared to the other methods
 var emailReg = regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
 
-func (s *StringValidator[T]) Email() *StringValidator[T] {
+func (s *StringValidator[T]) Email(customErr ...error) *StringValidator[T] {
 	if s.err != nil {
 		return s
 	}
 
 	if !emailReg.Match(gopt.StringToBytes(string(s.val))) {
-		s.err = gverrors.ErrEmail
+		s.err = pkg.DefaultOrCustomError(gverrors.ErrEmail, customErr...)
 	}
 
 	return s
 }
 
-func (s *StringValidator[T]) Lower() *StringValidator[T] {
+func (s *StringValidator[T]) Lower(customErr ...error) *StringValidator[T] {
 	if s.err != nil {
 		return s
 	}
 
 	for _, c := range s.val {
 		if unicode.IsUpper(c) {
-			s.err = gverrors.ErrUpper
+			s.err = pkg.DefaultOrCustomError(gverrors.ErrUpper, customErr...)
 			return s
 		}
 	}
@@ -38,14 +39,14 @@ func (s *StringValidator[T]) Lower() *StringValidator[T] {
 	return s
 }
 
-func (s *StringValidator[T]) Upper() *StringValidator[T] {
+func (s *StringValidator[T]) Upper(customErr ...error) *StringValidator[T] {
 	if s.err != nil {
 		return s
 	}
 
 	for _, c := range s.val {
 		if unicode.IsLower(c) {
-			s.err = gverrors.ErrLower
+			s.err = pkg.DefaultOrCustomError(gverrors.ErrLower, customErr...)
 			return s
 		}
 	}
@@ -62,13 +63,13 @@ func isHex[T ~string](v T) bool {
 	return true
 }
 
-func (s *StringValidator[T]) Hex() *StringValidator[T] {
+func (s *StringValidator[T]) Hex(customErr ...error) *StringValidator[T] {
 	if s.err != nil {
 		return s
 	}
 
 	if !isHex(s.val) {
-		s.err = gverrors.ErrNotHex
+		s.err = pkg.DefaultOrCustomError(gverrors.ErrNotHex, customErr...)
 		return s
 	}
 
@@ -83,53 +84,51 @@ func isAlpha[T ~string](v T) bool {
 	}
 	return true
 }
-func (s *StringValidator[T]) Alpha() *StringValidator[T] {
+func (s *StringValidator[T]) Alpha(customErr ...error) *StringValidator[T] {
 	if s.err != nil {
 		return s
 	}
 
 	if !isAlpha(s.val) {
-		s.err = gverrors.ErrNotAlpha
+		s.err = pkg.DefaultOrCustomError(gverrors.ErrNotAlpha, customErr...)
 		return s
 	}
 
 	return s
 }
 
-func (s *StringValidator[T]) UUID() *StringValidator[T] {
+func (s *StringValidator[T]) UUID(customErr ...error) *StringValidator[T] {
 	if s.err != nil {
 		return s
 	}
 
 	if len(s.val) != 36 {
-		s.err = gverrors.ErrNotUUID
-		return s
+		goto errorCase
 	}
 
 	if !isHex(s.val[:8]) {
-		s.err = gverrors.ErrNotUUID
-		return s
+		goto errorCase
 	}
 	if !isHex(s.val[9:13]) {
-		s.err = gverrors.ErrNotUUID
-		return s
+		goto errorCase
 	}
 
 	if !isHex(s.val[14:18]) {
-		s.err = gverrors.ErrNotUUID
-		return s
+		goto errorCase
 	}
 
 	if !isHex(s.val[19:23]) {
-		s.err = gverrors.ErrNotUUID
-		return s
+		goto errorCase
 	}
 
 	if !isHex(s.val[24:32]) {
-		s.err = gverrors.ErrNotUUID
-		return s
+		goto errorCase
 	}
 
+	return s
+
+errorCase:
+	s.err = pkg.DefaultOrCustomError(gverrors.ErrNotUUID, customErr...)
 	return s
 }
 

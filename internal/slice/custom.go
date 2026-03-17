@@ -1,8 +1,11 @@
 package slice
 
-import gverrors "github.com/501urchin/gv/internal/errors"
+import (
+	gverrors "github.com/501urchin/gv/internal/errors"
+	"github.com/501urchin/gv/internal/pkg"
+)
 
-func (s *SliceValidator[T]) Unique() *SliceValidator[T] {
+func (s *SliceValidator[T]) Unique(customErr ...error) *SliceValidator[T] {
 	if len(s.val) <= 1 {
 		return s
 	}
@@ -13,7 +16,7 @@ func (s *SliceValidator[T]) Unique() *SliceValidator[T] {
 		vm[v]++
 
 		if vm[v] > 1 {
-			s.err = gverrors.ErrNotUnique
+			s.err = pkg.DefaultOrCustomError(gverrors.ErrNotUnique, customErr...)
 			return s
 		}
 	}
@@ -22,7 +25,7 @@ func (s *SliceValidator[T]) Unique() *SliceValidator[T] {
 }
 
 // UniqueBy can be used for cases where you have a []struct and want only a specific field to be unqiue
-func (s *SliceValidator[T]) UniqueBy(fn func(v T) any) *SliceValidator[T] {
+func (s *SliceValidator[T]) UniqueBy(fn func(v T) any, customErr ...error) *SliceValidator[T] {
 	if len(s.val) <= 1 {
 		return s
 	}
@@ -34,13 +37,13 @@ func (s *SliceValidator[T]) UniqueBy(fn func(v T) any) *SliceValidator[T] {
 		vm[vl]++
 
 		if vm[vl] > 1 {
-			s.err = gverrors.ErrNotUnique
+			s.err = pkg.DefaultOrCustomError(gverrors.ErrNotUnique, customErr...)
 			return s
 		}
 	}
 	return s
 }
-func (s *SliceValidator[T]) Custom(fn func(v []T) error) *SliceValidator[T] {
+func (s *SliceValidator[T]) Custom(fn func(v []T) error, customErr ...error) *SliceValidator[T] {
 	err := fn(s.val)
 	if err != nil {
 		s.err = err
@@ -49,21 +52,21 @@ func (s *SliceValidator[T]) Custom(fn func(v []T) error) *SliceValidator[T] {
 	return s
 }
 
-func (s *SliceValidator[T]) Any(fn func(T) bool) *SliceValidator[T] {
+func (s *SliceValidator[T]) Any(fn func(T) bool, customErr ...error) *SliceValidator[T] {
 	for _, v := range s.val {
 		if fn(v) {
 			return s
 		}
 	}
 
-	s.err = gverrors.ErrNotSatisfied
+	s.err = pkg.DefaultOrCustomError(gverrors.ErrNotSatisfied, customErr...)
 	return s
 }
 
-func (s *SliceValidator[T]) All(fn func(T) bool) *SliceValidator[T] {
+func (s *SliceValidator[T]) All(fn func(T) bool, customErr ...error) *SliceValidator[T] {
 	for _, v := range s.val {
 		if !fn(v) {
-			s.err = gverrors.ErrNotSatisfied
+			s.err = pkg.DefaultOrCustomError(gverrors.ErrNotSatisfied, customErr...)
 			return s
 		}
 	}
