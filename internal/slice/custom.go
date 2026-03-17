@@ -45,7 +45,7 @@ func (s *SliceValidator[T]) Custom(fn func(v []T) error) *SliceValidator[T] {
 	if err != nil {
 		s.err = err
 	}
-	
+
 	return s
 }
 
