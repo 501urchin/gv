@@ -1,0 +1,34 @@
+name: Go Test gv
+
+on:
+    push:
+        branches: [main]
+        paths:
+            - '**.go'
+            - go.mod
+            - go.sum
+    pull_request:
+        branches: [main]
+        paths:
+            - '**.go'
+            - go.mod
+            - go.sum
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Set up Go
+              uses: actions/setup-go@v5
+              with:
+                  go-version: '1.26'
+
+            - name: Install dependencies
+              run: go mod tidy
+
+            - name: Run tests
+              run: go test -v -p 1 --race -timeout 30s ./...
