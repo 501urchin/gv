@@ -21,7 +21,7 @@ func BenchmarkHelpers(b *testing.B) {
 	var info = Data{
 		Name:     "J",
 		Username: "jack 123",
-		Job:      "sodifbovhbsodhfbvohsbdfhuvohuvsboudfhbovhbfouhbvhsbovhjbsodhbvodhsobfhvodhsfvbodfhboh",
+		Job:      "work",
 		Age:      24,
 		Tags:     []string{"hello", "world"},
 	}
