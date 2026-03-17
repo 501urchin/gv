@@ -91,7 +91,6 @@ since writing validation logic can become repetitive i took inspiration from zod
 // Schema takes in func(info *T) error.
 // T represents the data you pass into Validate, so you can reference it
 // inside the validation function and write custom logic per field.
-// this is how gv avoids reflection and keeps allocations to a minimum.
 dataSchema := gv.Schema(func(info *Data) error {
 	return gv.First(
 		gv.String(info.Name).Required().Min(3).Max(25).Validate(),
