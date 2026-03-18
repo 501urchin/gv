@@ -14,7 +14,7 @@ import (
 var emailReg = regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
 
 func (s *StringValidator[T]) Email(customErr ...error) *StringValidator[T] {
-	if s.err != nil {
+	if s.optional || s.err != nil {
 		return s
 	}
 
@@ -26,7 +26,7 @@ func (s *StringValidator[T]) Email(customErr ...error) *StringValidator[T] {
 }
 
 func (s *StringValidator[T]) Lower(customErr ...error) *StringValidator[T] {
-	if s.err != nil {
+	if s.optional || s.err != nil {
 		return s
 	}
 
@@ -41,7 +41,7 @@ func (s *StringValidator[T]) Lower(customErr ...error) *StringValidator[T] {
 }
 
 func (s *StringValidator[T]) Upper(customErr ...error) *StringValidator[T] {
-	if s.err != nil {
+	if s.optional || s.err != nil {
 		return s
 	}
 
@@ -56,7 +56,7 @@ func (s *StringValidator[T]) Upper(customErr ...error) *StringValidator[T] {
 }
 
 func (s *StringValidator[T]) HasUpper(customErr ...error) *StringValidator[T] {
-	if s.err != nil {
+	if s.optional || s.err != nil {
 		return s
 	}
 
@@ -70,11 +70,7 @@ func (s *StringValidator[T]) HasUpper(customErr ...error) *StringValidator[T] {
 	return s
 }
 func (s *StringValidator[T]) HasLower(customErr ...error) *StringValidator[T] {
-	if s.err != nil {
-		return s
-	}
-
-	if s.err != nil {
+	if s.optional || s.err != nil {
 		return s
 	}
 
@@ -88,7 +84,7 @@ func (s *StringValidator[T]) HasLower(customErr ...error) *StringValidator[T] {
 	return s
 }
 func (s *StringValidator[T]) HasNumber(customErr ...error) *StringValidator[T] {
-	if s.err != nil {
+	if s.optional || s.err != nil {
 		return s
 	}
 
@@ -102,7 +98,7 @@ func (s *StringValidator[T]) HasNumber(customErr ...error) *StringValidator[T] {
 	return s
 }
 func (s *StringValidator[T]) HasSymbol(customErr ...error) *StringValidator[T] {
-	if s.err != nil {
+	if s.optional || s.err != nil {
 		return s
 	}
 
@@ -126,7 +122,7 @@ func isHex[T ~string](v T) bool {
 }
 
 func (s *StringValidator[T]) Hex(customErr ...error) *StringValidator[T] {
-	if s.err != nil {
+	if s.optional || s.err != nil {
 		return s
 	}
 
@@ -147,7 +143,7 @@ func isAlpha[T ~string](v T) bool {
 	return true
 }
 func (s *StringValidator[T]) Alpha(customErr ...error) *StringValidator[T] {
-	if s.err != nil {
+	if s.optional || s.err != nil {
 		return s
 	}
 
@@ -160,7 +156,7 @@ func (s *StringValidator[T]) Alpha(customErr ...error) *StringValidator[T] {
 }
 
 func (s *StringValidator[T]) UUID(customErr ...error) *StringValidator[T] {
-	if s.err != nil {
+	if s.optional || s.err != nil {
 		return s
 	}
 

@@ -22,7 +22,7 @@ func parseIpv4Octet[T ~string](b T) (int, bool) {
 }
 
 func (s *StringValidator[T]) Ipv4(customErr ...error) *StringValidator[T] {
-	if s.err != nil {
+	if s.optional || s.err != nil {
 		return s
 	}
 

@@ -6,6 +6,10 @@ import (
 )
 
 func (s *SliceValidator[T]) Unique(customErr ...error) *SliceValidator[T] {
+	if s.optional || s.err != nil {
+		return s
+	}
+
 	if len(s.val) <= 1 {
 		return s
 	}
@@ -26,6 +30,10 @@ func (s *SliceValidator[T]) Unique(customErr ...error) *SliceValidator[T] {
 
 // UniqueBy can be used for cases where you have a []struct and want only a specific field to be unqiue
 func (s *SliceValidator[T]) UniqueBy(fn func(v T) any, customErr ...error) *SliceValidator[T] {
+	if s.optional || s.err != nil {
+		return s
+	}
+
 	if len(s.val) <= 1 {
 		return s
 	}
@@ -44,6 +52,10 @@ func (s *SliceValidator[T]) UniqueBy(fn func(v T) any, customErr ...error) *Slic
 	return s
 }
 func (s *SliceValidator[T]) Custom(fn func(v []T) error, customErr ...error) *SliceValidator[T] {
+	if s.optional || s.err != nil {
+		return s
+	}
+
 	err := fn(s.val)
 	if err != nil {
 		s.err = err
@@ -53,6 +65,10 @@ func (s *SliceValidator[T]) Custom(fn func(v []T) error, customErr ...error) *Sl
 }
 
 func (s *SliceValidator[T]) Any(fn func(T) bool, customErr ...error) *SliceValidator[T] {
+	if s.optional || s.err != nil {
+		return s
+	}
+
 	for _, v := range s.val {
 		if fn(v) {
 			return s
@@ -64,6 +80,10 @@ func (s *SliceValidator[T]) Any(fn func(T) bool, customErr ...error) *SliceValid
 }
 
 func (s *SliceValidator[T]) All(fn func(T) bool, customErr ...error) *SliceValidator[T] {
+	if s.optional || s.err != nil {
+		return s
+	}
+	
 	for _, v := range s.val {
 		if !fn(v) {
 			s.err = pkg.DefaultOrCustomError(gverrors.ErrNotSatisfied, customErr...)

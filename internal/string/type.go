@@ -2,17 +2,23 @@
 package string
 
 type StringValidator[T ~string] struct {
-	val T
-	err error
+	optional bool
+	val      T
+	err      error
 }
 
 func NewStringValidator[T ~string](v T) *StringValidator[T] {
 	return &StringValidator[T]{
-		val: v,
-		err: nil,
+		optional: false,
+		val:      v,
+		err:      nil,
 	}
 }
 
 func (s *StringValidator[T]) Validate(customErr ...error) error {
+	if s.optional {
+		s.err = nil
+	}
+	
 	return s.err
 }

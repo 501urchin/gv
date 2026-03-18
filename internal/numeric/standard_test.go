@@ -111,4 +111,38 @@ func TestStandard(t *testing.T) {
 			t.Error("func didnt return custom error while it was supposed to")
 		}
 	})
+
+	t.Run("default", func(t *testing.T) {
+		err := NewNumericValidator(0).Default(5).Min(1).Validate()
+		if err != nil {
+			t.Error("func returned a err while it wasnt supposed to")
+		}
+
+		err = NewNumericValidator(1).Default(10).Max(0).Validate()
+		if !errors.Is(err, gverrors.ErrMax) {
+			t.Error("func didnt keep original value while it was supposed to")
+		}
+	})
+
+	t.Run("when", func(t *testing.T) {
+		customErr := errors.New("custom")
+
+		err := NewNumericValidator(5).When(false, func(val int) error {
+			return customErr
+		}).Validate()
+		if err != nil {
+			t.Error("func returned a err while it wasnt supposed to")
+		}
+
+		err = NewNumericValidator(5).When(true, func(val int) error {
+			if val == 5 {
+				return customErr
+			}
+
+			return nil
+		}).Validate()
+		if !errors.Is(err, customErr) {
+			t.Error("func didnt return custom error while it was supposed to")
+		}
+	})
 }

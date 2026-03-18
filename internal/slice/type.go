@@ -2,8 +2,9 @@
 package slice
 
 type SliceValidator[T any] struct {
-	val []T
-	err error
+	optional bool
+	val      []T
+	err      error
 }
 
 func NewSliceValidator[T any](v []T) *SliceValidator[T] {
@@ -14,5 +15,9 @@ func NewSliceValidator[T any](v []T) *SliceValidator[T] {
 }
 
 func (s *SliceValidator[T]) Validate() error {
+	if s.optional {
+		s.err = nil
+	}
+	
 	return s.err
 }

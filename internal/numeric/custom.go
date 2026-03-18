@@ -8,7 +8,7 @@ import (
 )
 
 func (n *NumericValidator[T]) OneOf(values ...T) *NumericValidator[T] {
-	if n.err != nil {
+	if n.optional || n.err != nil {
 		return n
 	}
 
@@ -22,7 +22,7 @@ func (n *NumericValidator[T]) OneOf(values ...T) *NumericValidator[T] {
 	return n
 }
 func (n *NumericValidator[T]) NotOneOf(values ...T) *NumericValidator[T] {
-	if n.err != nil {
+	if n.optional || n.err != nil {
 		return n
 	}
 
@@ -36,7 +36,7 @@ func (n *NumericValidator[T]) NotOneOf(values ...T) *NumericValidator[T] {
 }
 
 func (n *NumericValidator[T]) Finite(customErr ...error) *NumericValidator[T] {
-	if n.err != nil {
+	if n.optional || n.err != nil {
 		return n
 	}
 

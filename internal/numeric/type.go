@@ -8,8 +8,9 @@ type Numeric interface {
 }
 
 type NumericValidator[T Numeric] struct {
-	val T
-	err error
+	optional bool
+	val      T
+	err      error
 }
 
 func NewNumericValidator[T Numeric](v T) *NumericValidator[T] {
@@ -20,5 +21,9 @@ func NewNumericValidator[T Numeric](v T) *NumericValidator[T] {
 }
 
 func (n *NumericValidator[T]) Validate() error {
+	if n.optional {
+		n.err = nil
+	}
+	
 	return n.err
 }

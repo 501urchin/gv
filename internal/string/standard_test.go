@@ -110,6 +110,40 @@ func TestStringStandard(t *testing.T) {
 		}
 	})
 
+	t.Run("default", func(t *testing.T) {
+		err := NewStringValidator("").Default("hello").Min(3).Validate()
+		if err != nil {
+			t.Error("func returned a err while it wasnt supposed to")
+		}
+
+		err = NewStringValidator("a").Default("hello").Min(2).Validate()
+		if err == nil {
+			t.Error("func didnt return a err while it was supposed to")
+		}
+	})
+
+	t.Run("when", func(t *testing.T) {
+		customErr := errors.New("custom")
+
+		err := NewStringValidator("hello").When(false, func(val string) error {
+			return customErr
+		}).Validate()
+		if err != nil {
+			t.Error("func returned a err while it wasnt supposed to")
+		}
+
+		err = NewStringValidator("hello").When(true, func(val string) error {
+			if val == "hello" {
+				return customErr
+			}
+
+			return nil
+		}).Validate()
+		if !errors.Is(err, customErr) {
+			t.Error("func didnt return custom error while it was supposed to")
+		}
+	})
+
 }
 
 func BenchmarkStandard(b *testing.B) {
