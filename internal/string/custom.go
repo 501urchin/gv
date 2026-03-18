@@ -5,6 +5,7 @@ import (
 	"unicode"
 
 	"github.com/501urchin/gopt"
+
 	gverrors "github.com/501urchin/gv/internal/errors"
 	"github.com/501urchin/gv/internal/pkg"
 )
@@ -30,7 +31,7 @@ func (s *StringValidator[T]) Lower(customErr ...error) *StringValidator[T] {
 	}
 
 	for _, c := range s.val {
-		if unicode.IsUpper(c) {
+		if unicode.IsLetter(c) && unicode.IsUpper(c) {
 			s.err = pkg.DefaultOrCustomError(gverrors.ErrUpper, customErr...)
 			return s
 		}
@@ -45,12 +46,73 @@ func (s *StringValidator[T]) Upper(customErr ...error) *StringValidator[T] {
 	}
 
 	for _, c := range s.val {
-		if unicode.IsLower(c) {
+		if unicode.IsLetter(c) && unicode.IsLower(c) {
 			s.err = pkg.DefaultOrCustomError(gverrors.ErrLower, customErr...)
 			return s
 		}
 	}
 
+	return s
+}
+
+func (s *StringValidator[T]) HasUpper(customErr ...error) *StringValidator[T] {
+	if s.err != nil {
+		return s
+	}
+
+	for _, c := range s.val {
+		if unicode.IsLetter(c) && unicode.IsUpper(c) {
+			return s
+		}
+	}
+
+	s.err = pkg.DefaultOrCustomError(gverrors.ErrNoUpper, customErr...)
+	return s
+}
+func (s *StringValidator[T]) HasLower(customErr ...error) *StringValidator[T] {
+	if s.err != nil {
+		return s
+	}
+
+	if s.err != nil {
+		return s
+	}
+
+	for _, c := range s.val {
+		if unicode.IsLetter(c) && unicode.IsLower(c) {
+			return s
+		}
+	}
+
+	s.err = pkg.DefaultOrCustomError(gverrors.ErrNoLower, customErr...)
+	return s
+}
+func (s *StringValidator[T]) HasNumber(customErr ...error) *StringValidator[T] {
+	if s.err != nil {
+		return s
+	}
+
+	for _, c := range s.val {
+		if unicode.IsNumber(c) {
+			return s
+		}
+	}
+
+	s.err = pkg.DefaultOrCustomError(gverrors.ErrNoNumber, customErr...)
+	return s
+}
+func (s *StringValidator[T]) HasSymbol(customErr ...error) *StringValidator[T] {
+	if s.err != nil {
+		return s
+	}
+
+	for _, c := range s.val {
+		if unicode.IsPunct(c) || unicode.IsSymbol(c) {
+			return s
+		}
+	}
+
+	s.err = pkg.DefaultOrCustomError(gverrors.ErrNoSymbol, customErr...)
 	return s
 }
 

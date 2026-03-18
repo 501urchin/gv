@@ -28,4 +28,9 @@ var (
 	ErrNotUnique     = errors.New("field contains duplicate values")
 	ErrNotSatisfied  = errors.New("field does not satisfy to rule")
 	ErrNotURL        = errors.New("field is not a valid url")
+
+	ErrNoUpper  = errors.New("field does not contain a uppercase letter")
+	ErrNoLower  = errors.New("field does not contain a lowercase letter")
+	ErrNoSymbol = errors.New("field does not contain a symbol")
+	ErrNoNumber = errors.New("field does not contain a number")
 )

@@ -66,6 +66,17 @@ func (s *StringValidator[T]) CantContain(v T, customErr ...error) *StringValidat
 
 	return s
 }
+func (s *StringValidator[T]) ContainsAny(v string, customErr ...error) *StringValidator[T] {
+	if s.err != nil {
+		return s
+	}
+
+	if !strings.ContainsAny(string(s.val), string(v)) {
+		s.err = pkg.DefaultOrCustomError(gverrors.ErrNotContains, customErr...)
+	}
+
+	return s
+}
 func (s *StringValidator[T]) NoWhitespace(customErr ...error) *StringValidator[T] {
 	if s.err != nil {
 		return s

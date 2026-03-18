@@ -75,6 +75,61 @@ func TestCustom(t *testing.T) {
 			t.Errorf("excpected %v but got %v", gverrors.ErrNotUUID, err)
 		}
 	})
+	t.Run("has upper", func(t *testing.T) {
+		err := NewStringValidator("Ad").HasUpper().Validate()
+		if err != nil {
+			t.Error("func threw error when it wasnt supposed to")
+		}
+
+		err = NewStringValidator("kshjd").HasUpper().Validate()
+		if !errors.Is(err, gverrors.ErrNoUpper) {
+			t.Errorf("excpected %v but got %v", gverrors.ErrNoUpper, err)
+		}
+	})
+	t.Run("has lower", func(t *testing.T) {
+		err := NewStringValidator("Ad").HasLower().Validate()
+		if err != nil {
+			t.Error("func threw error when it wasnt supposed to")
+		}
+
+		err = NewStringValidator("ASD").HasLower().Validate()
+		if !errors.Is(err, gverrors.ErrNoLower) {
+			t.Errorf("excpected %v but got %v", gverrors.ErrNoLower, err)
+		}
+	})
+	t.Run("has number", func(t *testing.T) {
+		err := NewStringValidator("A3d").HasNumber().Validate()
+		if err != nil {
+			t.Error("func threw error when it wasnt supposed to")
+		}
+
+		err = NewStringValidator("kshjd").HasNumber().Validate()
+		if !errors.Is(err, gverrors.ErrNoNumber) {
+			t.Errorf("excpected %v but got %v", gverrors.ErrNoNumber, err)
+		}
+	})
+	t.Run("has symbol", func(t *testing.T) {
+		err := NewStringValidator("@4").HasSymbol().Validate()
+		if err != nil {
+			t.Error("func threw error when it wasnt supposed to")
+		}
+
+		err = NewStringValidator("kshjd").HasSymbol().Validate()
+		if !errors.Is(err, gverrors.ErrNoSymbol) {
+			t.Errorf("excpected %v but got %v", gverrors.ErrNoSymbol, err)
+		}
+	})
+	t.Run("contains any", func(t *testing.T) {
+		err := NewStringValidator("1234").ContainsAny("1").Validate()
+		if err != nil {
+			t.Error("func threw error when it wasnt supposed to")
+		}
+
+		err = NewStringValidator("kshjd").ContainsAny("1").Validate()
+		if !errors.Is(err, gverrors.ErrNotContains) {
+			t.Errorf("excpected %v but got %v", gverrors.ErrNotContains, err)
+		}
+	})
 	// t.Run("url", func(t *testing.T) {
 	// 	err := NewStringValidator("www.jayac.dev").URL().Validate()
 	// 	if err != nil {

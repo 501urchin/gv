@@ -54,4 +54,3 @@ func (s *SliceValidator[T]) Max(v int, customErr ...error) *SliceValidator[T] {
 
 	return s
 }
-
