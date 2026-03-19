@@ -83,7 +83,7 @@ func (s *SliceValidator[T]) All(fn func(T) bool, customErr ...error) *SliceValid
 	if s.optional || s.err != nil {
 		return s
 	}
-	
+
 	for _, v := range s.val {
 		if !fn(v) {
 			s.err = pkg.DefaultOrCustomError(gverrors.ErrNotSatisfied, customErr...)

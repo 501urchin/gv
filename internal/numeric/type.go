@@ -24,6 +24,6 @@ func (n *NumericValidator[T]) Validate() error {
 	if n.optional {
 		n.err = nil
 	}
-	
+
 	return n.err
 }

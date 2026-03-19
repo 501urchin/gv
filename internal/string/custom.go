@@ -190,12 +190,11 @@ errorCase:
 	return s
 }
 
-// func (s *StringValidator[T]) URL() *StringValidator[T] {
-// 	_, err := url.Parse(string(s.val))
-// 	if err != nil {
-// 		s.err = gverrors.ErrNotURL
-// 		return s
-// 	}
+var urlRegex = regexp.MustCompile(`^(https?|ftp):\/\/(([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}|localhost)(:\d{1,5})?(\/[^\s]*)?$`)
 
-// 	return s
-// }
+func (s *StringValidator[T]) URL(customErr ...error) *StringValidator[T] {
+	if !urlRegex.MatchString(string(s.val)) {
+		s.err = pkg.DefaultOrCustomError(gverrors.ErrNotURL, customErr...)
+	}
+	return s
+}

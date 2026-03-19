@@ -18,6 +18,6 @@ func (p *pointerValidator[T]) Validate() error {
 	if p.optional {
 		p.err = nil
 	}
-	
+
 	return p.err
 }

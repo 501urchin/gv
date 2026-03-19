@@ -19,6 +19,6 @@ func (s *StringValidator[T]) Validate(customErr ...error) error {
 	if s.optional {
 		s.err = nil
 	}
-	
+
 	return s.err
 }

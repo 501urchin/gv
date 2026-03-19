@@ -24,7 +24,7 @@ func (s *StringValidator[T]) Optional() *StringValidator[T] {
 	if len(s.val) == 0 {
 		s.optional = true
 	}
-	
+
 	return s
 }
 

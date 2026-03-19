@@ -18,6 +18,6 @@ func (s *SliceValidator[T]) Validate() error {
 	if s.optional {
 		s.err = nil
 	}
-	
+
 	return s.err
 }
